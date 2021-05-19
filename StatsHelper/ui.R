@@ -27,7 +27,18 @@ shinyUI(fluidPage(
 
         # Show a plot of the generated distribution
         mainPanel(
-            plotOutput("distPlot")
+            
+            # Output: Tabset w/ plot, summary, and table ----
+            tabsetPanel(type = "tabs",
+                        tabPanel("Upload Data", plotOutput("distPlot")),
+                        tabPanel("Plan Analysis", verbatimTextOutput("summary")),
+                        tabPanel("Diagnostics", tableOutput("table")),
+                        tabPanel("Results", tableOutput("table"))
+                        
+            )
+            
         )
+        
+        
     )
 ))
