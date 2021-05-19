@@ -10,7 +10,7 @@
 library(shiny)
 
 # Define server logic required to draw a histogram
-shinyServer(function(input, output) {
+shinyServer(function(session, input, output) {
 
     output$distPlot <- renderPlot({
 
@@ -23,4 +23,71 @@ shinyServer(function(input, output) {
 
     })
 
+    
+    
+    
+    # "file" is the name of the csv input, create object that reads the csv and
+    #  updates automatically any time the file is changed
+    
+    dat <- reactive({
+        validate(need(input$file, ""))
+        infile <- input$file
+        df <- read.csv(infile$datapath,
+                       header = input$header,
+                       stringsAsFactors = FALSE)
+        return(df)
+    })
+    
+    
+    # this reacts to the csv input and the selection of number of comparison groups
+    #  to update the input options for the response and grouping variables
+    observe({
+        if(input$GroupNum == 1){
+        
+            updateSelectInput(session,"response",choices = colnames(dat()))
+            
+        } else {
+            
+            updateSelectInput(session,"response",choices = colnames(dat()))
+            updateCheckboxGroupInput(session,"predictor",choices = colnames(dat()))
+        
+        }
+    })
+    
 })
+
+
+##### UI Elements Needed #####
+
+# 'file' csv input
+
+# 'header' does your csv have headers?
+
+# 'GroupNum' Number of Groups to Compare
+
+# 'response' options for response variable
+
+# 'predictor' options for predictor variable
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
